@@ -1,0 +1,2 @@
+defmodule UeberauthHeroku do
+end
