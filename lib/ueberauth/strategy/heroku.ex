@@ -66,7 +66,7 @@ defmodule Ueberauth.Strategy.Heroku do
           heroku: { Ueberauth.Strategy.Heroku, [default_scope: "identity,read"] }
         ]
 
-  Deafult is "user,public_repo"
+  Deafult is "identity"
   """
   @heroku_api_account_url "https://api.heroku.com/account"
   use Ueberauth.Strategy, uid_field: :login,
