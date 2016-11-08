@@ -50,15 +50,6 @@ defmodule Ueberauth.Strategy.Heroku do
 
   You can edit the behaviour of the Strategy by including some options when you register your provider.
 
-  To set the `uid_field`
-
-      config :ueberauth, Ueberauth,
-        providers: [
-          heroku: { Ueberauth.Strategy.Heroku, [uid_field: :email] }
-        ]
-
-  Default is `:login`
-
   To set the default 'scopes' (permissions):
 
       config :ueberauth, Ueberauth,
@@ -69,8 +60,7 @@ defmodule Ueberauth.Strategy.Heroku do
   Deafult is "identity"
   """
   @heroku_api_account_url "https://api.heroku.com/account"
-  use Ueberauth.Strategy, uid_field: :login,
-                          default_scope: "identity",
+  use Ueberauth.Strategy, default_scope: "identity",
                           oauth2_module: Ueberauth.Strategy.Heroku.OAuth
 
   alias Ueberauth.Auth.Info
@@ -80,7 +70,7 @@ defmodule Ueberauth.Strategy.Heroku do
   @doc """
   Handles the initial redirect to the heroku authentication page.
 
-  To customize the scope (permissions) that are requested by heroku include them as part of your url:
+  To customize the scope (permissions) that are requested by Heroku include them as part of your url:
 
       "/auth/heroku?scope=global"
 
@@ -127,10 +117,10 @@ defmodule Ueberauth.Strategy.Heroku do
   end
 
   @doc """
-  Fetches the uid field from the Heroku response. This defaults to the option `uid_field` which in-turn defaults to `login`
+  Fetches the uid field from the Heroku response, which is `email` for Heroku.
   """
   def uid(conn) do
-    conn.private.heroku_user[option(conn, :uid_field) |> to_string]
+    conn.private.heroku_user["email"]
   end
 
   @doc """
