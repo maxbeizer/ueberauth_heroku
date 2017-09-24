@@ -8,15 +8,15 @@ defmodule UeberauthHeroku.Mixfile do
       app: :ueberauth_heroku,
       version: @version,
       name: "Ueberauth Heroku",
-      package: package,
+      package: package(),
       elixir: "~> 1.3",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       source_url:   "https://github.com/maxbeizer/ueberauth_heroku",
       homepage_url: "https://github.com/maxbeizer/ueberauth_heroku",
-      description: description,
-      deps: deps,
-      docs: docs
+      description: description(),
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -29,10 +29,9 @@ defmodule UeberauthHeroku.Mixfile do
   defp deps do
     [
       {:ueberauth, "~> 0.4"},
-      {:oauth2, "0.6.0"},
+      {:oauth2, "0.9.0"},
 
       # docs dependencies
-      {:earmark, "~> 0.2", only: :dev},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
