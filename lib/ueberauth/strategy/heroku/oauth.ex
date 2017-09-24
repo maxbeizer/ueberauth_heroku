@@ -57,7 +57,8 @@ defmodule Ueberauth.Strategy.Heroku.OAuth do
 
   def get_token(client, params, headers) do
     client
-    |> put_header("Accept", "application/json")
+    |> put_param(:client_secret, client.client_secret)
+    |> put_header("Accept", "application/vnd.heroku+json; version=3")
     |> OAuth2.Strategy.AuthCode.get_token(params, headers)
   end
 end
