@@ -42,10 +42,10 @@ defmodule Ueberauth.Strategy.Heroku.OAuth do
     |> OAuth2.Client.authorize_url!(params)
   end
 
-  def get_token!(params \\ [], options \\ %{}) do
-    headers = Dict.get(options, :headers, [])
-    options = Dict.get(options, :options, [])
-    client_options = Dict.get(options, :client_options, [])
+  def get_token!(params \\ [], options \\ []) do
+    headers = Keyword.get(options, :headers, [])
+    options = Keyword.get(options, :options, [])
+    client_options = Keyword.get(options, :client_options, [])
     OAuth2.Client.get_token!(client(client_options), params, headers, options)
   end
 
@@ -57,7 +57,8 @@ defmodule Ueberauth.Strategy.Heroku.OAuth do
 
   def get_token(client, params, headers) do
     client
-    |> put_header("Accept", "application/json")
+    |> put_param(:client_secret, client.client_secret)
+    |> put_header("Accept", "application/vnd.heroku+json; version=3")
     |> OAuth2.Strategy.AuthCode.get_token(params, headers)
   end
 end

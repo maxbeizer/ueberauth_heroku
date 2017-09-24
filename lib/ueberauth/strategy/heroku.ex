@@ -103,12 +103,13 @@ defmodule Ueberauth.Strategy.Heroku do
   """
   def handle_callback!(%Plug.Conn{ params: %{ "code" => code } } = conn) do
     module = option(conn, :oauth2_module)
-    token = apply(module, :get_token!, [[code: code]])
+    client = apply(module, :get_token!, [[code: code]])
+    token = OAuth2.AccessToken.new(client.token.access_token)
 
     if token.access_token == nil do
       set_errors!(conn, [error(token.other_params["error"], token.other_params["error_description"])])
     else
-      fetch_user(conn, token)
+      fetch_user(conn, client)
     end
   end
 
@@ -175,10 +176,10 @@ defmodule Ueberauth.Strategy.Heroku do
     }
   end
 
-  defp fetch_user(conn, token) do
-    conn = put_private(conn, :heroku_token, token)
-    case OAuth2.AccessToken.get(token, @heroku_api_account_url) do
-      { :ok, %OAuth2.Response{status_code: 401, body: _body}} ->
+  defp fetch_user(conn, client) do
+    conn = put_private(conn, :heroku_token, client.token)
+    case OAuth2.Client.get(client, @heroku_api_account_url, accept: "application/vnd.heroku+json; version=3") do
+      { :ok, %OAuth2.Response{status_code: 401, body: _body} } ->
         set_errors!(conn, [error("token", "unauthorized")])
       { :ok, %OAuth2.Response{status_code: status_code, body: user} } when status_code in 200..399 ->
         put_private(conn, :heroku_user, user)
@@ -188,6 +189,6 @@ defmodule Ueberauth.Strategy.Heroku do
   end
 
   defp option(conn, key) do
-    Dict.get(options(conn), key, Dict.get(default_options, key))
+    Keyword.get(options(conn), key, Keyword.get(default_options(), key))
   end
 end
