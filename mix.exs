@@ -32,7 +32,7 @@ defmodule UeberauthHeroku.Mixfile do
       {:oauth2, "0.9.0"},
 
       # docs dependencies
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
 
