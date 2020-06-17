@@ -14,7 +14,7 @@ defmodule Ueberauth.Strategy.Heroku.OAuth do
     strategy: __MODULE__,
     site: "https://id.heroku.com",
     authorize_url: "https://id.heroku.com/oauth/authorize",
-    token_url: "https://id.heroku.com/oauth/token",
+    token_url: "https://id.heroku.com/oauth/token"
   ]
 
   @doc """
@@ -28,10 +28,14 @@ defmodule Ueberauth.Strategy.Heroku.OAuth do
   These options are only useful for usage outside the normal callback phase of Ueberauth.
   """
   def client(opts \\ []) do
-    opts = Keyword.merge(@defaults, Application.get_env(:ueberauth, Ueberauth.Strategy.Heroku.OAuth))
-    |> Keyword.merge(opts)
+    opts =
+      Keyword.merge(@defaults, Application.get_env(:ueberauth, Ueberauth.Strategy.Heroku.OAuth))
+      |> Keyword.merge(opts)
+
+    json_library = Ueberauth.json_library()
 
     OAuth2.Client.new(opts)
+    |> OAuth2.Client.put_serializer("application/json", json_library)
   end
 
   @doc """

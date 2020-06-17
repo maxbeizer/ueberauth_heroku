@@ -28,11 +28,11 @@ defmodule UeberauthHeroku.Mixfile do
 
   defp deps do
     [
-      {:ueberauth, "~> 0.4"},
-      {:oauth2, "0.9.0"},
+      {:ueberauth, "~> 0.6"},
+      {:oauth2, "~>2.0"},
 
       # docs dependencies
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false}
     ]
   end
 
